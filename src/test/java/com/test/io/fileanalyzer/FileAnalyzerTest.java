@@ -1,28 +1,25 @@
 package com.test.io.fileanalyzer;
 
-
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class FileAnalyzerTest {
-    private FileAnalyzer fa = new FileAnalyzer();
-    private String word = "duck";
-    private StringBuilder sb = new StringBuilder();
-    private String expected = "duck to string.\n";
-
-
-    @Before
-    public void before() {
-        String string = "aaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaaaaaaaaaaaa?" +
-                "\r\n aaaaaaa?" + "duck \r\n to string.";
-        sb.append(string);
-    }
+    private StringBuilder text = new StringBuilder("aaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaaaaaaaaaaaa?" +
+            "\r\n aaaaaaa?" + "duck \r\n to string Duck.\n");
 
     @Test
     public void getResultTest() {
-        assertEquals(expected, fa.getString(sb, word));
-        assertEquals(1, fa.getCount(sb, word));
+        int count = 0;
+        String word = "duck";
+        String expected = "duck to string Duck.";
+        String[] sentences = FileAnalyzer.getSentences(text);
+        for (String sentence : sentences) {
+            if (FileAnalyzer.getMatches(sentence, word)) {
+                assertEquals(expected, sentence);
+                count+= sentence.toLowerCase().split(word).length-1;
+            }
+        }
+        assertEquals(2, count);
     }
 }
