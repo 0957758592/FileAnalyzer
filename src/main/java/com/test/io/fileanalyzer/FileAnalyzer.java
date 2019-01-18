@@ -22,6 +22,11 @@ public class FileAnalyzer {
         return sentences.toString().replaceAll("\r\n|\n", "").replaceAll("( )+", " ").split(REGEX);
     }
 
+
+    static int splitSentence(String sentence, String word) {
+        return sentence.toLowerCase().split("\\b" + word + "\\b").length - 1;
+    }
+
     private static void analyzeFile(String pathToFile, String word) throws IOException {
         File file = new File(pathToFile);
 
@@ -45,12 +50,13 @@ public class FileAnalyzer {
         for (String sentence : sentences) {
             Boolean matchesString = getMatches(sentence.toLowerCase(), word);
             if (matchesString) {
-                count += Math.abs(sentence.toLowerCase().split("\\b" + word + "\\b").length - 1);
+                count += splitSentence(sentence, word);
                 System.out.println(sentence);
             }
         }
 
         System.out.println(count);
     }
+
 
 }
